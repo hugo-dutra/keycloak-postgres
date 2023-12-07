@@ -54,6 +54,3 @@ Não se esqueça de alterar as credenciais e outras informações sensíveis ant
 - [Documentação do Postgres](https://www.postgresql.org/docs/)
 - [Documentação do Docker Compose](https://docs.docker.com/compose/)
 
----
-
-Copie e cole este texto no seu `README.md` no GitHub para uma exibição elegante e informativa!
