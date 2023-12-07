@@ -2,30 +2,37 @@ version: '3'
 
 services:
   keycloak:
-      image: quay.io/keycloak/keycloak:legacy
-      environment:
-        DB_VENDOR: POSTGRES
-        DB_ADDR: postgres
-        DB_DATABASE: keycloak
-        DB_USER: keycloak #NUNCA DEIXE HARDCODED EM PRODUÇÃO
-        DB_SCHEMA: keycloak_schema
-        DB_PASSWORD: keycloak #NUNCA DEIXE HARDCODED EM PRODUÇÃO
-        DB_PORT: 5432
-        KEYCLOAK_USER: admin
-        KEYCLOAK_PASSWORD: admin
-      ports:
-        - 8080:8080
-      depends_on:
-        - postgres
+    image: quay.io/keycloak/keycloak:legacy
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: keycloak # Lembrar de alterar em produção
+      DB_SCHEMA: keycloak_schema
+      DB_PASSWORD: keycloak # Lembrar de alterar em produção
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    networks:
+      - keycloak_network
 
   postgres:
     image: postgres
     environment:
       POSTGRES_DB: keycloak
-      POSTGRES_USER: keycloak #NUNCA DEIXE HARDCODED EM PRODUÇÃO
-      POSTGRES_PASSWORD: keycloak #NUNCA DEIXE HARDCODED EM PRODUÇÃO
+      POSTGRES_USER: keycloak # Lembrar de alterar em produção
+      POSTGRES_PASSWORD: keycloak # Lembrar de alterar em produção
     volumes:
       - D:/curso_spring_db:/var/lib/postgresql/data
       - ./init-schema.sql:/docker-entrypoint-initdb.d/init-schema.sql
     ports:
-      - 5432:5432
+      - 3333:5432 # PORTA EXTERNA : PORTA INTERNA DO CONTAINER || #Lembrar de alterar em produção para a porta externa ser diferente da padrão
+    networks:
+      - keycloak_network
+
+networks:
+  keycloak_network:
+    driver: bridge
