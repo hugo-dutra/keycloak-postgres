@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  keycloak:
+      image: quay.io/keycloak/keycloak:legacy
+      environment:
+        DB_VENDOR: POSTGRES
+        DB_ADDR: postgres
+        DB_DATABASE: keycloak
+        DB_USER: keycloak #NUNCA DEIXE HARDCODED EM PRODUÇÃO
+        DB_SCHEMA: keycloak_schema
+        DB_PASSWORD: keycloak #NUNCA DEIXE HARDCODED EM PRODUÇÃO
+        DB_PORT: 5432
+        KEYCLOAK_USER: admin
+        KEYCLOAK_PASSWORD: admin
+      ports:
+        - 8080:8080
+      depends_on:
+        - postgres
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak #NUNCA DEIXE HARDCODED EM PRODUÇÃO
+      POSTGRES_PASSWORD: keycloak #NUNCA DEIXE HARDCODED EM PRODUÇÃO
+    volumes:
+      - D:/curso_spring_db:/var/lib/postgresql/data
+      - ./init-schema.sql:/docker-entrypoint-initdb.d/init-schema.sql
+    ports:
+      - 5432:5432
